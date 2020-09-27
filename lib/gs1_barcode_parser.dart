@@ -1,0 +1,1 @@
+export 'src/barcode_parser.dart' ;

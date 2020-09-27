@@ -1,0 +1,13 @@
+name: gs1_barcode_parser
+description: GS1 Barcode parser.
+version: 0.0.1
+author: Sergey A. Chebotarev
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dev_dependencies:
+  test: ^1.15.4
+
+
