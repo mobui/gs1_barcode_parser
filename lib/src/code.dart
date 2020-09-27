@@ -17,6 +17,12 @@ class Code {
     this.fnc1,
   });
 
+  @override
+  bool operator ==(Object other) => other is Code && other.type == type;
+
+  @override
+  int get hashCode => type.index;
+
   static final UNDEFINED_CODE = const Code(
     type: CodeType.UNDEFINED,
     codeTitle: 'Undefined',

@@ -4,38 +4,59 @@ import 'code_parser.dart';
 import 'element_parser.dart';
 import 'exception.dart';
 
+class GS1BarcodeParserConfig {
+  static const DEFAULT_GROUP_SEPARATOR = '\u{001d}';
+  static const DEFAULT_FNC1 = "\u{00e8}";
+  final bool allowEmptyPrefix;
+  final String groupSeparator;
+
+  GS1BarcodeParserConfig({
+    this.allowEmptyPrefix = false,
+    this.groupSeparator = DEFAULT_GROUP_SEPARATOR,
+  });
+}
+
 class GS1BarcodeParser {
-  static final DEFAULT_GROUP_SEPARATOR = "\u{001d}";
-  static final DEFAULT_FNC1 = "\u{00e8}";
-
-  final bool _allowEmptyPrefix;
-
   final Map<AIFormatType, GS1ElementParser> _elementParsers;
 
   final GS1CodeParser _codeParser;
 
+  final GS1BarcodeParserConfig _config;
+
   GS1BarcodeParser._({
-    bool allowEmptyPrefix,
+    GS1BarcodeParserConfig config,
     GS1CodeParser codeParser,
     Map<AIFormatType, GS1ElementParser> elementParsers,
   })  : assert(elementParsers != null),
         assert(codeParser != null),
-        _allowEmptyPrefix = allowEmptyPrefix,
+        assert(config != null),
+        _config = config,
         _elementParsers = elementParsers,
         _codeParser = codeParser;
 
-  factory GS1BarcodeParser.byDefault({bool allowEmptyPrefix = false}) {
-    return GS1BarcodeParser._(
-        allowEmptyPrefix: allowEmptyPrefix,
-        codeParser: GS1PrefixCodeParser(),
-        elementParsers: {
-          AIFormatType.FIXED_LENGTH: GS1ElementFixLengthParser(),
-          AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
-        });
+  factory GS1BarcodeParser.defaultParser() {
+    return GS1BarcodeParser.configurableParser(GS1BarcodeParserConfig());
   }
 
-  factory GS1BarcodeParser.byDefaultWithAllowEmptyPrefix() {
-    return GS1BarcodeParser.byDefault(allowEmptyPrefix: true);
+  factory GS1BarcodeParser.configurableParser(GS1BarcodeParserConfig config) {
+    final elementParsers = {
+      AIFormatType.DATE: GS1DateParser(),
+      AIFormatType.FIXED_LENGTH: GS1ElementFixLengthParser(),
+      AIFormatType.FIXED_LENGTH_MEASURE: GS1ElementFixLengthMeasureParser(),
+      AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS:
+          GS1VariableLengthWithISONumbersParser(),
+      AIFormatType.VARIABLE_LENGTH_MEASURE: GS1VariableLengthMeasureParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS:
+          GS1VariableLengthWithISOCharsParser(),
+    };
+    final codeParser = GS1PrefixCodeParser();
+
+    return GS1BarcodeParser._(
+      config: config,
+      codeParser: codeParser,
+      elementParsers: elementParsers,
+    );
   }
 
   GS1Barcode parse(String data) {
@@ -44,7 +65,8 @@ class GS1BarcodeParser {
     }
 
     final codeWithRest = _codeParser(data);
-    if (codeWithRest.code.type == CodeType.UNDEFINED && !_allowEmptyPrefix) {
+    if (codeWithRest.code.type == CodeType.UNDEFINED &&
+        !_config.allowEmptyPrefix) {
       throw GS1DataException(message: 'FNC1 prefix not found');
     }
 
@@ -54,16 +76,16 @@ class GS1BarcodeParser {
       throw GS1DataException(message: 'No date present');
     }
 
-    final elements = <String, GS1ParsedElement>{};
+    final elements = <AI, GS1ParsedElement>{};
 
     while (restOfBarcode.length > 0) {
       final res = _identifyAI(restOfBarcode);
-      elements.putIfAbsent(res.element.ai, () => res.element);
+      elements.putIfAbsent(AI.AIS[res.element.aiCode], () => res.element);
       restOfBarcode = res.rest;
     }
 
     return GS1Barcode(
-      codeName: codeWithRest.code.codeTitle,
+      code: codeWithRest.code,
       elements: elements,
     );
   }
@@ -81,32 +103,73 @@ class GS1BarcodeParser {
       ai = AI.AIS[fourNumber];
     }
     if (ai == null) {
-      throw GS1ParseException(message: 'AI not found');
+      throw GS1ParseException(message: 'AI not found for $data');
     }
-    return _elementParsers[ai.type](data, ai);
+    return _elementParsers[ai.type](data, ai, _config);
   }
 }
 
 class GS1ParsedElement<T> {
-  final String ai;
-  final String aiTitle;
-  final String unit;
+  final String aiCode;
+  final String iso;
   final T data;
+  final String rawData;
 
   const GS1ParsedElement({
-    this.ai,
-    this.aiTitle,
-    this.unit = '',
+    this.aiCode,
+    this.iso = '',
+    this.rawData,
     this.data,
   });
 }
 
 class GS1Barcode {
-  final String codeName;
-  final Map<String, GS1ParsedElement> elements;
+  final Code code;
+  final Map<AI, GS1ParsedElement> elements;
 
   const GS1Barcode({
-    this.codeName,
+    this.code,
     this.elements,
   });
+
+  List<String> get AIs => elements.keys.map((e) => e.code).toList();
+
+  bool hasAI(String ai) => elements.keys.map((e) => e.code).contains(ai);
+
+  dynamic getAIData(String ai) => elements.values
+      .firstWhere((element) => element.aiCode == ai, orElse: null)
+      ?.data;
+
+  String getAIRawData(String ai) => elements.values
+      .firstWhere((element) => element.aiCode == ai, orElse: null)
+      ?.rawData;
+
+  GS1ParsedElement getAIDataAsParsedElement(String ai) => elements.values
+      .firstWhere((element) => element.aiCode == ai, orElse: null);
+
+  Map<String, dynamic> get getAIsData => elements.values.fold(
+      {},
+      (previousValue, element) =>
+          previousValue.putIfAbsent(element.aiCode, () => element.data));
+
+  Map<String, GS1ParsedElement> get getAIsDataAsParsedElement =>
+      elements.values.fold<Map<String, GS1ParsedElement>>(
+          {},
+          (previousValue, element) =>
+              previousValue..putIfAbsent(element.aiCode, () => element));
+
+  Map<String, dynamic> get getAIsRawData => elements.values.fold(
+      {},
+      (previousValue, element) =>
+          previousValue.putIfAbsent(element.aiCode, () => element.rawData));
+
+  @override
+  String toString() {
+    final elem = elements.entries.fold(
+        '',
+        (previousValue, element) =>
+            previousValue +
+            '${element.key.code} (${element.key.dataTitle}): ${element.value.data},\n');
+    return 'code = ${code.codeTitle},\ndata = {\n$elem}';
+  }
 }
