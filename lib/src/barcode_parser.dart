@@ -76,11 +76,11 @@ class GS1BarcodeParser {
       throw GS1DataException(message: 'No date present');
     }
 
-    final elements = <AI, GS1ParsedElement>{};
+    final elements = <String, GS1ParsedElement>{};
 
     while (restOfBarcode.length > 0) {
       final res = _identifyAI(restOfBarcode);
-      elements.putIfAbsent(AI.AIS[res.element.aiCode], () => res.element);
+      elements.putIfAbsent(res.element.aiCode, () => res.element);
       restOfBarcode = res.rest;
     }
 
@@ -125,43 +125,39 @@ class GS1ParsedElement<T> {
 
 class GS1Barcode {
   final Code code;
-  final Map<AI, GS1ParsedElement> elements;
+  final Map<String, GS1ParsedElement> elements;
 
   const GS1Barcode({
     this.code,
     this.elements,
   });
 
-  List<String> get AIs => elements.keys.map((e) => e.code).toList();
+  List<String> get AIs => elements.keys;
 
-  bool hasAI(String ai) => elements.keys.map((e) => e.code).contains(ai);
+  bool hasAI(String ai) => elements.containsKey(ai);
 
-  dynamic getAIData(String ai) => elements.values
-      .firstWhere((element) => element.aiCode == ai, orElse: null)
-      ?.data;
+  dynamic getAIData(String ai) => elements[ai].data;
 
-  String getAIRawData(String ai) => elements.values
-      .firstWhere((element) => element.aiCode == ai, orElse: null)
-      ?.rawData;
+  String getAIRawData(String ai) => elements[ai].rawData;
 
-  GS1ParsedElement getAIDataAsParsedElement(String ai) => elements.values
-      .firstWhere((element) => element.aiCode == ai, orElse: null);
+  GS1ParsedElement getAIParsedElement(String ai) => elements[ai];
 
   Map<String, dynamic> get getAIsData => elements.values.fold(
       {},
       (previousValue, element) =>
-          previousValue.putIfAbsent(element.aiCode, () => element.data));
+          previousValue..putIfAbsent(element.aiCode, () => element.data));
 
-  Map<String, GS1ParsedElement> get getAIsDataAsParsedElement =>
+  Map<String, GS1ParsedElement> get getAIsParsedElement =>
       elements.values.fold<Map<String, GS1ParsedElement>>(
           {},
           (previousValue, element) =>
               previousValue..putIfAbsent(element.aiCode, () => element));
 
-  Map<String, dynamic> get getAIsRawData => elements.values.fold(
-      {},
-      (previousValue, element) =>
-          previousValue.putIfAbsent(element.aiCode, () => element.rawData));
+  Map<String, String> get getAIsRawData =>
+      elements.values.fold<Map<String, String>>(
+          {},
+          (previousValue, element) => previousValue
+            ..putIfAbsent(element.aiCode, () => element.rawData));
 
   @override
   String toString() {
@@ -169,7 +165,7 @@ class GS1Barcode {
         '',
         (previousValue, element) =>
             previousValue +
-            '${element.key.code} (${element.key.dataTitle}): ${element.value.data},\n');
+            '${element.key} (${AI.AIS[element.key].dataTitle}): ${element.value.data},\n');
     return 'code = ${code.codeTitle},\ndata = {\n$elem}';
   }
 }
