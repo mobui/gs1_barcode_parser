@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:gs1_barcode_parser/src/ai.dart';
 import 'package:gs1_barcode_parser/src/barcode_parser.dart';
 
@@ -40,7 +42,7 @@ class GS1DateParser extends GS1ElementParser {
   ParsedElementWithRest call(
       String data, AI ai, GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
-    final elementStr = data.substring(0, offset);
+    final elementStr = data.substring(0, min(offset, data.length));
 
     if (!verify(elementStr, ai)) {
       throw GS1ParseException(
@@ -48,15 +50,9 @@ class GS1DateParser extends GS1ElementParser {
     }
 
     final elementDate = elementStr.substring(ai.code.length);
-    var year = int.parse(elementDate.substring(0, 2), radix: 10);
+    var year = _year2ToYear4(int.parse(elementDate.substring(0, 2), radix: 10));
     final month = int.parse(elementDate.substring(2, 4), radix: 10);
     final day = int.parse(elementDate.substring(4), radix: 10);
-
-    if (year > 50) {
-      year = year + 1900;
-    } else {
-      year = year + 2000;
-    }
 
     final element = GS1ParsedElement<DateTime>(
       rawData: elementDate,
@@ -67,6 +63,10 @@ class GS1DateParser extends GS1ElementParser {
     final rest = getRest(data, offset, config);
     return ParsedElementWithRest(element: element, rest: rest);
   }
+
+  _year2ToYear4(int year) {
+    return year > 50 ? year + 1900 : year = year + 2000;
+  }
 }
 
 class GS1ElementFixLengthParser extends GS1ElementParser {
@@ -74,7 +74,8 @@ class GS1ElementFixLengthParser extends GS1ElementParser {
   ParsedElementWithRest call(
       String data, AI ai, GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
-    final elementStr = data.substring(0, offset);
+
+    final elementStr = data.substring(0, min(offset, data.length));
 
     if (!verify(elementStr, ai)) {
       throw GS1ParseException(
@@ -98,7 +99,8 @@ class GS1ElementFixLengthMeasureParser extends GS1ElementParser {
   ParsedElementWithRest call(
       String data, AI ai, GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
-    final elementStr = data.substring(0, offset);
+
+    final elementStr = data.substring(0, min(offset, data.length) );
 
     if (!verify(elementStr, ai)) {
       throw GS1ParseException(
