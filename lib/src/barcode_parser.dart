@@ -78,7 +78,7 @@ class GS1BarcodeParser {
 
     final elements = <String, GS1ParsedElement>{};
 
-    while (restOfBarcode.length > 0) {
+    while (restOfBarcode.isNotEmpty) {
       final res = _identifyAI(restOfBarcode);
       elements.putIfAbsent(res.element.aiCode, () => res.element);
       restOfBarcode = res.rest;

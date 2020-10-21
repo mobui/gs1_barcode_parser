@@ -31,8 +31,9 @@ abstract class GS1ElementParser {
 
   String getRest(String data, int offset, GS1BarcodeParserConfig config) {
     var result = data.length < offset ? '' : data.substring(offset);
-    while (result.startsWith(config.groupSeparator))
+    while (result.startsWith(config.groupSeparator)){
       result = result.substring(1);
+    }
     return result;
   }
 }

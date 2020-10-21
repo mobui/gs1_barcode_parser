@@ -8,28 +8,39 @@ enum AIFormatType {
   DATE,
 }
 
-/// Application Identifier see https://www.gs1.org/standards/barcodes/application-identifiers?lang=en
+/// Application Identifier
+/// GS1 Application Identifiers (AIs) are prefixes used in barcodes and EPC/RFID-tags
+/// to define the meaning and format of data attributes. This tool was developed
+/// in response to the growing use of AIs in the various industry sectors to
+/// include product data beyond the GTIN, such as the batch/lot number, serial number,
+/// best before date and expiration date. It also allows users, solution providers and
+/// GS1 Member Organisations to easily view, search and share details about individual
+/// Application Identifiers through web-browsers or on a mobile device.
+/// see https://www.gs1.org/standards/barcodes/application-identifiers?lang=en
 class AI {
   static const _ALLOW_CHAR =
       '[\u{0021}-\u{0022}\u{0025}-\u{002f}\u{0030}-\u{0039}\u{003a}-\u{003f}\u{0041}-\u{005a}\u{005f}\u{0061}-\u{007a}]';
 
   static const _DATE_FIX_LENGTH = 6;
 
-  final String code;
-  final String dataTitle;
-  final AIFormatType type;
+  final String _code;
+
+  final String _dataTitle;
+
+  final AIFormatType _type;
+
   final int _fixLength;
-  final String regExpString;
-  final String description;
+  final String _regExpString;
+  final String _description;
 
   const AI({
-    this.code,
-    this.dataTitle,
-    this.type,
+    String code,
+    String dataTitle,
+    AIFormatType type,
     int fixLength,
-    this.regExpString = '',
-    this.description,
-  }) : _fixLength = fixLength;
+    String regExpString,
+    String description,
+  }) : _fixLength = fixLength, _code = code, _dataTitle = dataTitle, _type = type, _regExpString = regExpString, _description = description;
 
   @override
   bool operator ==(Object other) => other is AI && other.code == code;
@@ -37,11 +48,26 @@ class AI {
   @override
   int get hashCode => code.hashCode;
 
-  RegExp get regExp => RegExp(regExpString);
+  /// AI Code
+  String get code => _code;
 
+  /// AI data title
+  String get dataTitle => _dataTitle;
+
+  /// AI data description
+  String get description => _description;
+
+  /// AI format type
+  AIFormatType get type => _type;
+
+  /// Regular expression
+  RegExp get regExp => RegExp(_regExpString);
+
+  /// Number of places for decimal element (for other is 0)
   int get numberOfDecimalPlaces =>
       (code.length == 4) ? int.parse(code[3], radix: 10) : 0;
 
+  /// Length for AI with fixed length (for other is 0)
   int get fixLength {
     if (type == AIFormatType.FIXED_LENGTH) return _fixLength;
     if (type == AIFormatType.FIXED_LENGTH_MEASURE) return _fixLength;
@@ -49,6 +75,7 @@ class AI {
     return 0;
   }
 
+  /// AIs List
   static final Map<String, AI> AIS = {
     '00': const AI(
       code: '00',
@@ -265,6 +292,293 @@ class AI {
         description: 'Net weight, kilograms (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3105(\d{6})$'),
+    '3110': const AI(
+        code: '3110',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description:
+            'Length or first dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3110(\d{6})$'),
+    '3111': const AI(
+        code: '3111',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description:
+            'Length or first dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3111(\d{6})$'),
+    '3112': const AI(
+        code: '3112',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description:
+            'Length or first dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3112(\d{6})$'),
+    '3113': const AI(
+        code: '3113',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description:
+            'Length or first dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3113(\d{6})$'),
+    '3114': const AI(
+        code: '3114',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description:
+            'Length or first dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3114(\d{6})$'),
+    '3115': const AI(
+        code: '3115',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'LENGTH (m)',
+        description: '',
+        fixLength: 6,
+        regExpString: r'^3115(\d{6})$'),
+    '3120': const AI(
+        code: '3110',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3110(\d{6})$'),
+    '3121': const AI(
+        code: '3121',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3121(\d{6})$'),
+    '3122': const AI(
+        code: '3122',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3122(\d{6})$'),
+    '3123': const AI(
+        code: '3123',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3123(\d{6})$'),
+    '3124': const AI(
+        code: '3124',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3124(\d{6})$'),
+    '3125': const AI(
+        code: '3125',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'WIDTH (m)',
+        description:
+            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3125(\d{6})$'),
+    '3130': const AI(
+        code: '3130',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3130(\d{6})$'),
+    '3131': const AI(
+        code: '3131',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3131(\d{6})$'),
+    '3132': const AI(
+        code: '3132',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3132(\d{6})$'),
+    '3133': const AI(
+        code: '3133',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3133(\d{6})$'),
+    '3134': const AI(
+        code: '3134',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3134(\d{6})$'),
+    '3135': const AI(
+        code: '3135',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'HEIGHT (m)',
+        description:
+        'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3135(\d{6})$'),
+    '3140': const AI(
+        code: '3140',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3140(\d{6})$'),
+    '3141': const AI(
+        code: '3141',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3141(\d{6})$'),
+    '3142': const AI(
+        code: '3142',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3142(\d{6})$'),
+    '3143': const AI(
+        code: '3143',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3140(\d{6})$'),
+    '3144': const AI(
+        code: '3144',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3140(\d{6})$'),
+    '3145': const AI(
+        code: '3145',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'AREA (m2)',
+        description:
+        'Area, square metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3140(\d{6})$'),
+    '3150': const AI(
+        code: '3140',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3140(\d{6})$'),
+    '3151': const AI(
+        code: '3151',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3151(\d{6})$'),
+    '3152': const AI(
+        code: '3152',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3152(\d{6})$'),
+    '3153': const AI(
+        code: '3153',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3153(\d{6})$'),
+    '3154': const AI(
+        code: '3154',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3154(\d{6})$'),
+    '3155': const AI(
+        code: '3155',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (l)',
+        description:
+        'Net volume, litres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3155(\d{6})$'),
+    '3160': const AI(
+        code: '3160',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3160(\d{6})$'),
+    '3161': const AI(
+        code: '3161',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3161(\d{6})$'),
+    '3162': const AI(
+        code: '3162',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3162(\d{6})$'),
+    '3163': const AI(
+        code: '3163',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3160(\d{6})$'),
+    '3164': const AI(
+        code: '3164',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3160(\d{6})$'),
+    '3165': const AI(
+        code: '3165',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'NET VOLUME (m3)',
+        description:
+        'Net volume, cubic metres (variable measure trade item)',
+        fixLength: 6,
+        regExpString: r'^3160(\d{6})$'),
     '3922': const AI(
         code: '3922',
         type: AIFormatType.VARIABLE_LENGTH_MEASURE,
