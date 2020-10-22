@@ -7,8 +7,11 @@ enum CodeType {
 }
 
 class Code {
+  /// Code type
   final CodeType type;
+  /// Code title
   final String codeTitle;
+  /// FNC1 (Prefix) for code
   final String fnc1;
 
   const Code({
@@ -23,12 +26,14 @@ class Code {
   @override
   int get hashCode => type.index;
 
+  /// Undefined code with empty prefix
   static final UNDEFINED_CODE = const Code(
     type: CodeType.UNDEFINED,
     codeTitle: 'Undefined',
     fnc1: '',
   );
 
+  /// Codes
   static final Map<CodeType, Code> CODES = {
     CodeType.DATAMATRIX: const Code(
       type: CodeType.DATAMATRIX,

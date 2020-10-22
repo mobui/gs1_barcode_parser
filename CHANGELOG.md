@@ -4,3 +4,9 @@
 ## [0.0.2]
 * Add comment for AI class
 * Add 31++ AI definition
+
+
+## [0.0.3]
+* Allow empty prefix in default configuration 
+* Get methods of GS1Barcode return null for nonexistent elements
+* Add method description

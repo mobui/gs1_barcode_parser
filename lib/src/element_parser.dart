@@ -31,7 +31,7 @@ abstract class GS1ElementParser {
 
   String getRest(String data, int offset, GS1BarcodeParserConfig config) {
     var result = data.length < offset ? '' : data.substring(offset);
-    while (result.startsWith(config.groupSeparator)){
+    while (result.startsWith(config.groupSeparator)) {
       result = result.substring(1);
     }
     return result;
@@ -40,8 +40,8 @@ abstract class GS1ElementParser {
 
 class GS1DateParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
     final elementStr = data.substring(0, min(offset, data.length));
 
@@ -72,8 +72,8 @@ class GS1DateParser extends GS1ElementParser {
 
 class GS1ElementFixLengthParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
 
     final elementStr = data.substring(0, min(offset, data.length));
@@ -97,11 +97,11 @@ class GS1ElementFixLengthParser extends GS1ElementParser {
 
 class GS1ElementFixLengthMeasureParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
 
-    final elementStr = data.substring(0, min(offset, data.length) );
+    final elementStr = data.substring(0, min(offset, data.length));
 
     if (!verify(elementStr, ai)) {
       throw GS1ParseException(
@@ -122,8 +122,8 @@ class GS1ElementFixLengthMeasureParser extends GS1ElementParser {
 
 class GS1VariableLengthParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final posOfGS = data.indexOf(config.groupSeparator);
     final offset = posOfGS == -1 ? data.length : posOfGS;
     final elementStr = data.substring(0, offset);
@@ -151,8 +151,8 @@ class GS1VariableLengthParser extends GS1ElementParser {
 
 class GS1VariableLengthMeasureParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final posOfGS = data.indexOf(config.groupSeparator);
     final offset = posOfGS == -1 ? data.length : posOfGS;
     final elementStr = data.substring(0, offset);
@@ -174,8 +174,8 @@ class GS1VariableLengthMeasureParser extends GS1ElementParser {
 
 class GS1VariableLengthWithISONumbersParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final posOfGS = data.indexOf(config.groupSeparator);
     final offset = posOfGS == -1 ? data.length : posOfGS;
     final elementStr = data.substring(0, offset);
@@ -201,8 +201,8 @@ class GS1VariableLengthWithISONumbersParser extends GS1ElementParser {
 
 class GS1VariableLengthWithISOCharsParser extends GS1ElementParser {
   @override
-  ParsedElementWithRest call(
-      String data, AI ai, GS1BarcodeParserConfig config) {
+  ParsedElementWithRest call(String data, AI ai,
+      GS1BarcodeParserConfig config) {
     final posOfGS = data.indexOf(config.groupSeparator);
     final offset = posOfGS == -1 ? data.length : posOfGS;
     final elementStr = data.substring(0, offset);

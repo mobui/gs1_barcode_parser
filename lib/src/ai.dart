@@ -13,6 +13,7 @@ enum AIFormatType {
 /// to define the meaning and format of data attributes. This tool was developed
 /// in response to the growing use of AIs in the various industry sectors to
 /// include product data beyond the GTIN, such as the batch/lot number, serial number,
+/// include product data beyond the GTIN, such as the batch/lot number, serial number,
 /// best before date and expiration date. It also allows users, solution providers and
 /// GS1 Member Organisations to easily view, search and share details about individual
 /// Application Identifiers through web-browsers or on a mobile device.
@@ -40,7 +41,13 @@ class AI {
     int fixLength,
     String regExpString,
     String description,
-  }) : _fixLength = fixLength, _code = code, _dataTitle = dataTitle, _type = type, _regExpString = regExpString, _description = description;
+  })
+      : _fixLength = fixLength,
+        _code = code,
+        _dataTitle = dataTitle,
+        _type = type,
+        _regExpString = regExpString,
+        _description = description;
 
   @override
   bool operator ==(Object other) => other is AI && other.code == code;
@@ -185,7 +192,7 @@ class AI {
       dataTitle: 'ADDITIONAL ID',
       regExpString: '^240($_ALLOW_CHAR{0,30})\$',
       description:
-          'Additional product identification assigned by the manufacturer',
+      'Additional product identification assigned by the manufacturer',
     ),
     '241': const AI(
       code: '241',
@@ -297,7 +304,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
         description:
-            'Length or first dimension, metres (variable measure trade item)',
+        'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3110(\d{6})$'),
     '3111': const AI(
@@ -305,7 +312,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
         description:
-            'Length or first dimension, metres (variable measure trade item)',
+        'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3111(\d{6})$'),
     '3112': const AI(
@@ -313,7 +320,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
         description:
-            'Length or first dimension, metres (variable measure trade item)',
+        'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3112(\d{6})$'),
     '3113': const AI(
@@ -321,7 +328,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
         description:
-            'Length or first dimension, metres (variable measure trade item)',
+        'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3113(\d{6})$'),
     '3114': const AI(
@@ -329,7 +336,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
         description:
-            'Length or first dimension, metres (variable measure trade item)',
+        'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3114(\d{6})$'),
     '3115': const AI(
@@ -344,7 +351,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3110(\d{6})$'),
     '3121': const AI(
@@ -352,7 +359,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3121(\d{6})$'),
     '3122': const AI(
@@ -360,7 +367,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3122(\d{6})$'),
     '3123': const AI(
@@ -368,7 +375,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3123(\d{6})$'),
     '3124': const AI(
@@ -376,7 +383,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3124(\d{6})$'),
     '3125': const AI(
@@ -384,7 +391,7 @@ class AI {
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
         description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3125(\d{6})$'),
     '3130': const AI(
@@ -584,21 +591,21 @@ class AI {
         type: AIFormatType.VARIABLE_LENGTH_MEASURE,
         dataTitle: 'PRICE',
         description:
-            'Applicable amount payable, single monetary area (variable measure trade item)',
+        'Applicable amount payable, single monetary area (variable measure trade item)',
         regExpString: r'^3922(\d{0,15})$'),
     '3932': const AI(
         code: '3932',
         type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS,
         dataTitle: 'PRICE',
         description:
-            'Applicable amount payable with ISO currency code (variable measure trade item)',
+        'Applicable amount payable with ISO currency code (variable measure trade item)',
         regExpString: r'^3932(\d{3})(\d{0,15})$'),
     '3933': const AI(
         code: '3933',
         type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS,
         dataTitle: 'PRICE',
         description:
-            'Applicable amount payable with ISO currency code (variable measure trade item)',
+        'Applicable amount payable with ISO currency code (variable measure trade item)',
         regExpString: r'^3933(\d{3})(\d{0,15})$'),
     '421': const AI(
         code: '421',

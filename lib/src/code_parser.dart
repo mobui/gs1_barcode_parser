@@ -18,7 +18,7 @@ class GS1PrefixCodeParser implements GS1CodeParser {
   @override
   CodeWithRest call(String data) {
     final code = Code.CODES.values.firstWhere(
-        (element) => data.startsWith(element.fnc1),
+            (element) => data.startsWith(element.fnc1),
         orElse: () => Code.UNDEFINED_CODE);
     return CodeWithRest(
       rest: data.substring(code.fnc1.length),
