@@ -10,3 +10,9 @@
 * Allow empty prefix in default configuration 
 * Get methods of GS1Barcode return null for nonexistent elements
 * Add method description
+
+## [0.0.4]
+* Add example 
+
+## [0.0.5]
+* Add 312+ AI definition
