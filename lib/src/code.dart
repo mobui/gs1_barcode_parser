@@ -9,8 +9,10 @@ enum CodeType {
 class Code {
   /// Code type
   final CodeType type;
+
   /// Code title
   final String codeTitle;
+
   /// FNC1 (Prefix) for code
   final String fnc1;
 

@@ -7,8 +7,10 @@ import 'exception.dart';
 class GS1BarcodeParserConfig {
   static const DEFAULT_GROUP_SEPARATOR = '\u{001d}';
   static const DEFAULT_FNC1 = "\u{00e8}";
+
   /// Allow empty prefix for barcode see [Code]
   final bool allowEmptyPrefix;
+
   /// Group separator. Default 0xE8
   final String groupSeparator;
 
@@ -29,8 +31,7 @@ class GS1BarcodeParser {
     GS1BarcodeParserConfig config,
     GS1CodeParser codeParser,
     Map<AIFormatType, GS1ElementParser> elementParsers,
-  })
-      : assert(elementParsers != null),
+  })  : assert(elementParsers != null),
         assert(codeParser != null),
         assert(config != null),
         _config = config,
@@ -50,10 +51,10 @@ class GS1BarcodeParser {
       AIFormatType.FIXED_LENGTH_MEASURE: GS1ElementFixLengthMeasureParser(),
       AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
       AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS:
-      GS1VariableLengthWithISONumbersParser(),
+          GS1VariableLengthWithISONumbersParser(),
       AIFormatType.VARIABLE_LENGTH_MEASURE: GS1VariableLengthMeasureParser(),
       AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS:
-      GS1VariableLengthWithISOCharsParser(),
+          GS1VariableLengthWithISOCharsParser(),
     };
     final codeParser = GS1PrefixCodeParser();
 
@@ -116,9 +117,16 @@ class GS1BarcodeParser {
 }
 
 class GS1ParsedElement<T> {
+  /// AI code
   final String aiCode;
+
+  /// ISO data (currency, country)
   final String iso;
+
+  /// parsed data element
   final T data;
+
+  /// raw data element
   final String rawData;
 
   const GS1ParsedElement({
@@ -132,6 +140,7 @@ class GS1ParsedElement<T> {
 class GS1Barcode {
   /// Barcode description
   final Code code;
+
   /// Map of parsed AI elements. Key - AI string, value - parsed element
   final Map<String, GS1ParsedElement> elements;
 
@@ -156,35 +165,32 @@ class GS1Barcode {
   GS1ParsedElement getAIParsedElement(String ai) => elements[ai];
 
   /// Get all parsed AI elements data
-  Map<String, dynamic> get getAIsData =>
-      elements.values.fold(
-          {},
-              (previousValue, element) =>
+  Map<String, dynamic> get getAIsData => elements.values.fold(
+      {},
+      (previousValue, element) =>
           previousValue..putIfAbsent(element.aiCode, () => element.data));
 
   /// Get all AI elements
   Map<String, GS1ParsedElement> get getAIsParsedElement =>
       elements.values.fold<Map<String, GS1ParsedElement>>(
           {},
-              (previousValue, element) =>
-          previousValue..putIfAbsent(element.aiCode, () => element));
+          (previousValue, element) =>
+              previousValue..putIfAbsent(element.aiCode, () => element));
 
   /// Get all raw AI elements data
   Map<String, String> get getAIsRawData =>
       elements.values.fold<Map<String, String>>(
           {},
-              (previousValue, element) =>
-          previousValue
+          (previousValue, element) => previousValue
             ..putIfAbsent(element.aiCode, () => element.rawData));
 
   @override
   String toString() {
     final elem = elements.entries.fold(
         '',
-            (previousValue, element) =>
-        previousValue +
-            '${element.key} (${AI.AIS[element.key].dataTitle}): ${element.value
-                .data},\n');
+        (previousValue, element) =>
+            previousValue +
+            '${element.key} (${AI.AIS[element.key].dataTitle}): ${element.value.data},\n');
     return 'code = ${code.codeTitle},\ndata = {\n$elem}';
   }
 }
