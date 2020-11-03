@@ -16,13 +16,11 @@ abstract class GS1CodeParser {
 
 class GS1PrefixCodeParser implements GS1CodeParser {
   @override
-  CodeWithRest call(String data, {CodeType codeType}) {
+  CodeWithRest call(String data) {
     var code = Code.CODES.values.firstWhere(
         (element) => data.startsWith(element.fnc1),
         orElse: () => Code.UNDEFINED_CODE);
-    if (code == Code.UNDEFINED_CODE && codeType != null) {
-      code = Code.CODES[codeType];
-    }
+
     return CodeWithRest(
       rest: data.substring(code.fnc1.length),
       code: code,

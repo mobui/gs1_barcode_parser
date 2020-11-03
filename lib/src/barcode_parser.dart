@@ -7,11 +7,15 @@ import 'exception.dart';
 class GS1BarcodeParserConfig {
   static const DEFAULT_GROUP_SEPARATOR = '\u{001d}';
   static const DEFAULT_FNC1 = "\u{00e8}";
+
+  /// Allow empty prefix for barcode see [Code]
   final bool allowEmptyPrefix;
+
+  /// Group separator. Default 0xE8
   final String groupSeparator;
 
   GS1BarcodeParserConfig({
-    this.allowEmptyPrefix = false,
+    this.allowEmptyPrefix = true,
     this.groupSeparator = DEFAULT_GROUP_SEPARATOR,
   });
 }
@@ -34,10 +38,12 @@ class GS1BarcodeParser {
         _elementParsers = elementParsers,
         _codeParser = codeParser;
 
+  /// Create parser with default config
   factory GS1BarcodeParser.defaultParser() {
     return GS1BarcodeParser.configurableParser(GS1BarcodeParserConfig());
   }
 
+  /// Create parser with custom config
   factory GS1BarcodeParser.configurableParser(GS1BarcodeParserConfig config) {
     final elementParsers = {
       AIFormatType.DATE: GS1DateParser(),
@@ -59,12 +65,15 @@ class GS1BarcodeParser {
     );
   }
 
+  /// Parse barcode string
   GS1Barcode parse(String data, {CodeType codeType}) {
     if (data.isEmpty) {
       GS1DataException(message: 'Barcode is empty');
     }
 
-    final codeWithRest = _codeParser(_normalize(data));
+    final codeWithRest = _codeParser(
+      _normalize(data, codeType: codeType),
+    );
     if (codeWithRest.code.type == CodeType.UNDEFINED &&
         !_config.allowEmptyPrefix) {
       throw GS1DataException(message: 'FNC1 prefix not found');
@@ -110,20 +119,31 @@ class GS1BarcodeParser {
   }
 
   /// Delete control characters in start of data
-  String _normalize(String data) {
+  String _normalize(String data, {CodeType codeType}) {
     String result = data;
     while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) ||
         result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
       result = result.substring(1);
     }
-    return result;
+    if (codeType == null) {
+      return result;
+    } else {
+      return Code.CODES[codeType].fnc1 + result;
+    }
   }
 }
 
 class GS1ParsedElement<T> {
+  /// AI code
   final String aiCode;
+
+  /// ISO data (currency, country)
   final String iso;
+
+  /// parsed data element
   final T data;
+
+  /// raw data element
   final String rawData;
 
   const GS1ParsedElement({
@@ -135,7 +155,10 @@ class GS1ParsedElement<T> {
 }
 
 class GS1Barcode {
+  /// Barcode description
   final Code code;
+
+  /// Map of parsed AI elements. Key - AI string, value - parsed element
   final Map<String, GS1ParsedElement> elements;
 
   const GS1Barcode({
@@ -143,27 +166,35 @@ class GS1Barcode {
     this.elements,
   });
 
+  /// Get available AIs
   List<String> get AIs => elements.keys;
 
+  /// Checking for availability AI
   bool hasAI(String ai) => elements.containsKey(ai);
 
-  dynamic getAIData(String ai) => elements[ai].data;
+  /// Get parser AI element data
+  dynamic getAIData(String ai) => elements[ai]?.data;
 
-  String getAIRawData(String ai) => elements[ai].rawData;
+  /// Get raw AI element data
+  String getAIRawData(String ai) => elements[ai]?.rawData;
 
+  /// Get AI element
   GS1ParsedElement getAIParsedElement(String ai) => elements[ai];
 
+  /// Get all parsed AI elements data
   Map<String, dynamic> get getAIsData => elements.values.fold(
       {},
       (previousValue, element) =>
           previousValue..putIfAbsent(element.aiCode, () => element.data));
 
+  /// Get all AI elements
   Map<String, GS1ParsedElement> get getAIsParsedElement =>
       elements.values.fold<Map<String, GS1ParsedElement>>(
           {},
           (previousValue, element) =>
               previousValue..putIfAbsent(element.aiCode, () => element));
 
+  /// Get all raw AI elements data
   Map<String, String> get getAIsRawData =>
       elements.values.fold<Map<String, String>>(
           {},

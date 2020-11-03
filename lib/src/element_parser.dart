@@ -31,7 +31,7 @@ abstract class GS1ElementParser {
 
   String getRest(String data, int offset, GS1BarcodeParserConfig config) {
     var result = data.length < offset ? '' : data.substring(offset);
-    while (result.startsWith(config.groupSeparator)){
+    while (result.startsWith(config.groupSeparator)) {
       result = result.substring(1);
     }
     return result;
@@ -101,7 +101,7 @@ class GS1ElementFixLengthMeasureParser extends GS1ElementParser {
       String data, AI ai, GS1BarcodeParserConfig config) {
     final offset = ai.code.length + ai.fixLength;
 
-    final elementStr = data.substring(0, min(offset, data.length) );
+    final elementStr = data.substring(0, min(offset, data.length));
 
     if (!verify(elementStr, ai)) {
       throw GS1ParseException(
