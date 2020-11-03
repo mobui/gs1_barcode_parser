@@ -612,5 +612,66 @@ class AI {
         dataTitle: 'COUNTRY - INITIAL PROCESS.',
         description: 'Country of initial processing',
         regExpString: r'^423(\d{3})(\d{0,12})$'),
+
+    '90': const AI(
+        code: '90',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Information mutually agreed between trading partners',
+        regExpString: '^90(\\d{2})($_ALLOW_CHAR{0,30})\$'),
+    '91': const AI(
+        code: '91',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^91(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '92': const AI(
+        code: '92',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^92(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '93': const AI(
+        code: '93',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^93(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '94': const AI(
+        code: '94',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^94(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '95': const AI(
+        code: '95',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^95(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '96': const AI(
+        code: '96',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^96(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '97': const AI(
+        code: '97',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^97(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '98': const AI(
+        code: '99',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^98(\\d{2})($_ALLOW_CHAR{0,90})\$'),
+    '99': const AI(
+        code: '99',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'INTERNAL',
+        description: 'Company internal information',
+        regExpString: '^99(\\d{2})($_ALLOW_CHAR{0,90})\$'),
   };
 }

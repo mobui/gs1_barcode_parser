@@ -59,12 +59,12 @@ class GS1BarcodeParser {
     );
   }
 
-  GS1Barcode parse(String data) {
+  GS1Barcode parse(String data, {CodeType codeType}) {
     if (data.isEmpty) {
       GS1DataException(message: 'Barcode is empty');
     }
 
-    final codeWithRest = _codeParser(data);
+    final codeWithRest = _codeParser(_normalize(data));
     if (codeWithRest.code.type == CodeType.UNDEFINED &&
         !_config.allowEmptyPrefix) {
       throw GS1DataException(message: 'FNC1 prefix not found');
@@ -90,6 +90,7 @@ class GS1BarcodeParser {
     );
   }
 
+  /// Get ans parse AI
   ParsedElementWithRest _identifyAI(String data) {
     final twoNumber = data.substring(0, 2);
     var ai = AI.AIS[twoNumber];
@@ -106,6 +107,16 @@ class GS1BarcodeParser {
       throw GS1ParseException(message: 'AI not found for $data');
     }
     return _elementParsers[ai.type](data, ai, _config);
+  }
+
+  /// Delete control characters in start of data
+  String _normalize(String data) {
+    String result = data;
+    while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) ||
+        result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
+      result = result.substring(1);
+    }
+    return result;
   }
 }
 
