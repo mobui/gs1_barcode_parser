@@ -21,3 +21,7 @@
 * Add 9+ AI definition
 * Add  code type for parser
 * Fix fist FNC1 symbol
+
+## [0.0.7]
+* Add 32+ AI definition
+* Fix 30 AI definition

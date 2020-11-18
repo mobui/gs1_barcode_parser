@@ -19,7 +19,7 @@ main() {
     final parser = GS1BarcodeParser.defaultParser();
     final result = parser.parse(barcode);
     print(result);
-    expect(result.code.type, CodeType.QR_CODE);
+    expect(result.code.type, CodeType.GS1_128);
     expect(result.hasAI('01'), true);
     expect(result.getAIRawData('01'), '04012345678901');
   });
