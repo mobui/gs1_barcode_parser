@@ -1041,6 +1041,14 @@ class AI {
             'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3295(\d{6})$'),
+    '37': const AI(
+        code: '37',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'COUNT',
+        description:
+        'Count of trade items or trade item pieces contained in a logistic unit',
+        fixLength: 8,
+        regExpString: r'^37(\d{0,8})$'),
     '3922': const AI(
         code: '3922',
         type: AIFormatType.VARIABLE_LENGTH_MEASURE,
