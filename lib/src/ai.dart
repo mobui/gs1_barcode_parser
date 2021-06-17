@@ -30,17 +30,17 @@ class AI {
 
   final AIFormatType _type;
 
-  final int _fixLength;
+  final int? _fixLength;
   final String _regExpString;
   final String _description;
 
   const AI({
-    String code,
-    String dataTitle,
-    AIFormatType type,
-    int fixLength,
-    String regExpString,
-    String description,
+    required String code,
+    required String dataTitle,
+    required AIFormatType type,
+    int? fixLength,
+    required String regExpString,
+    required String description,
   })  : _fixLength = fixLength,
         _code = code,
         _dataTitle = dataTitle,
@@ -70,13 +70,12 @@ class AI {
   RegExp get regExp => RegExp(_regExpString);
 
   /// Number of places for decimal element (for other is 0)
-  int get numberOfDecimalPlaces =>
-      (code.length == 4) ? int.parse(code[3], radix: 10) : 0;
+  int get numberOfDecimalPlaces => (code.length == 4) ? int.parse(code[3], radix: 10) : 0;
 
   /// Length for AI with fixed length (for other is 0)
   int get fixLength {
-    if (type == AIFormatType.FIXED_LENGTH) return _fixLength;
-    if (type == AIFormatType.FIXED_LENGTH_MEASURE) return _fixLength;
+    if (type == AIFormatType.FIXED_LENGTH) return _fixLength ?? 0;
+    if (type == AIFormatType.FIXED_LENGTH_MEASURE) return _fixLength ?? 0;
     if (type == AIFormatType.DATE) return _DATE_FIX_LENGTH;
     return 0;
   }
@@ -117,6 +116,7 @@ class AI {
     '11': const AI(
       code: '11',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'PROD DATE',
       regExpString: r'^11(\d{6})$',
       description: 'Production date (YYMMDD)',
@@ -124,6 +124,7 @@ class AI {
     '12': const AI(
       code: '12',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'DUE DATE',
       regExpString: r'^12(\d{6})$',
       description: 'Due date (YYMMDD)',
@@ -131,6 +132,7 @@ class AI {
     '13': const AI(
       code: '13',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'PACK DATE',
       regExpString: r'^13(\d{6})$',
       description: 'Packaging date (YYMMDD)',
@@ -138,6 +140,7 @@ class AI {
     '15': const AI(
       code: '15',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'BEST BEFORE or BEST BY',
       regExpString: r'^15(\d{6})$',
       description: 'Best before date (YYMMDD)',
@@ -145,6 +148,7 @@ class AI {
     '16': const AI(
       code: '16',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'SELL BY',
       regExpString: r'^16(\d{6})$',
       description: 'Sell by date (YYMMDD)',
@@ -152,6 +156,7 @@ class AI {
     '17': const AI(
       code: '17',
       type: AIFormatType.DATE,
+      fixLength: AI._DATE_FIX_LENGTH,
       dataTitle: 'USE BY OR EXPIRY',
       description: 'Expiration date (YYMMDD)',
       regExpString: r'^17(\d{6})$',
@@ -190,8 +195,7 @@ class AI {
       type: AIFormatType.VARIABLE_LENGTH,
       dataTitle: 'ADDITIONAL ID',
       regExpString: '^240($_ALLOW_CHAR{0,30})\$',
-      description:
-          'Additional product identification assigned by the manufacturer',
+      description: 'Additional product identification assigned by the manufacturer',
     ),
     '241': const AI(
       code: '241',
@@ -302,40 +306,35 @@ class AI {
         code: '3110',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
-        description:
-            'Length or first dimension, metres (variable measure trade item)',
+        description: 'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3110(\d{6})$'),
     '3111': const AI(
         code: '3111',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
-        description:
-            'Length or first dimension, metres (variable measure trade item)',
+        description: 'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3111(\d{6})$'),
     '3112': const AI(
         code: '3112',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
-        description:
-            'Length or first dimension, metres (variable measure trade item)',
+        description: 'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3112(\d{6})$'),
     '3113': const AI(
         code: '3113',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
-        description:
-            'Length or first dimension, metres (variable measure trade item)',
+        description: 'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3113(\d{6})$'),
     '3114': const AI(
         code: '3114',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (m)',
-        description:
-            'Length or first dimension, metres (variable measure trade item)',
+        description: 'Length or first dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3114(\d{6})$'),
     '3115': const AI(
@@ -349,96 +348,84 @@ class AI {
         code: '3110',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3110(\d{6})$'),
     '3121': const AI(
         code: '3121',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3121(\d{6})$'),
     '3122': const AI(
         code: '3122',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3122(\d{6})$'),
     '3123': const AI(
         code: '3123',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3123(\d{6})$'),
     '3124': const AI(
         code: '3124',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3124(\d{6})$'),
     '3125': const AI(
         code: '3125',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (m)',
-        description:
-            'Width, diameter, or second dimension, metres (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3125(\d{6})$'),
     '3130': const AI(
         code: '3130',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3130(\d{6})$'),
     '3131': const AI(
         code: '3131',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3131(\d{6})$'),
     '3132': const AI(
         code: '3132',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3132(\d{6})$'),
     '3133': const AI(
         code: '3133',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3133(\d{6})$'),
     '3134': const AI(
         code: '3134',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3134(\d{6})$'),
     '3135': const AI(
         code: '3135',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (m)',
-        description:
-            'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, metres (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3135(\d{6})$'),
     '3140': const AI(
@@ -613,462 +600,404 @@ class AI {
         code: '3210',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3210(\d{6})$'),
     '3211': const AI(
         code: '3211',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3211(\d{6})$'),
     '3212': const AI(
         code: '3210',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3211(\d{6})$'),
     '3213': const AI(
         code: '3213',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3213(\d{6})$'),
     '3214': const AI(
         code: '3214',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3214(\d{6})$'),
     '3215': const AI(
         code: '3214',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (in)',
-        description:
-            'Length or first dimension, inches (variable measure trade item)',
+        description: 'Length or first dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3214(\d{6})$'),
     '3220': const AI(
         code: '3220',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3220(\d{6})$'),
     '3221': const AI(
         code: '3221',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3221(\d{6})$'),
     '3222': const AI(
         code: '3222',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3222(\d{6})$'),
     '3223': const AI(
         code: '3223',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3223(\d{6})$'),
     '3224': const AI(
         code: '3224',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3224(\d{6})$'),
     '3225': const AI(
         code: '3225',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (ft)',
-        description:
-            'Length or first dimension, feet (variable measure trade item)',
+        description: 'Length or first dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3225(\d{6})$'),
     '3230': const AI(
         code: '3230',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3230(\d{6})$'),
     '3231': const AI(
         code: '3231',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3231(\d{6})$'),
     '3232': const AI(
         code: '3232',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3232(\d{6})$'),
     '3233': const AI(
         code: '3233',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3233(\d{6})$'),
     '3234': const AI(
         code: '3234',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3234(\d{6})$'),
     '3235': const AI(
         code: '3230',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'LENGTH (yd)',
-        description:
-            'Length or first dimension, yards (variable measure trade item)',
+        description: 'Length or first dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3235(\d{6})$'),
     '3240': const AI(
         code: '3240',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3240(\d{6})$'),
     '3241': const AI(
         code: '3241',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3241(\d{6})$'),
     '3242': const AI(
         code: '3242',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3242(\d{6})$'),
     '3243': const AI(
         code: '3243',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3243(\d{6})$'),
     '3244': const AI(
         code: '3244',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3244(\d{6})$'),
     '3245': const AI(
         code: '3245',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (in)',
-        description:
-            'Width, diameter, or second dimension, inches (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3245(\d{6})$'),
     '3250': const AI(
         code: '3250',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3250(\d{6})$'),
     '3251': const AI(
         code: '3251',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3251(\d{6})$'),
     '3252': const AI(
         code: '3252',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3252(\d{6})$'),
     '3253': const AI(
         code: '3253',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3253(\d{6})$'),
     '3254': const AI(
         code: '3254',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3254(\d{6})$'),
     '3255': const AI(
         code: '3255',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (ft)',
-        description:
-            'Width, diameter, or second dimension, feet (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3255(\d{6})$'),
     '3260': const AI(
         code: '3260',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3260(\d{6})$'),
     '3261': const AI(
         code: '3261',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3261(\d{6})$'),
     '3262': const AI(
         code: '3262',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3262(\d{6})$'),
     '3263': const AI(
         code: '3263',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3263(\d{6})$'),
     '3264': const AI(
         code: '3264',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3264(\d{6})$'),
     '3265': const AI(
         code: '3265',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'WIDTH (yd)',
-        description:
-            'Width, diameter, or second dimension, yards (variable measure trade item)',
+        description: 'Width, diameter, or second dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3265(\d{6})$'),
     '3270': const AI(
         code: '3270',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3270(\d{6})$'),
     '3271': const AI(
         code: '3271',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3271(\d{6})$'),
     '3272': const AI(
         code: '3272',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3272(\d{6})$'),
     '3273': const AI(
         code: '3273',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3273(\d{6})$'),
     '3274': const AI(
         code: '3274',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3274(\d{6})$'),
     '3275': const AI(
         code: '3275',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (in)',
-        description:
-            'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, inches (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3275(\d{6})$'),
     '3280': const AI(
         code: '3280',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3280(\d{6})$'),
     '3281': const AI(
         code: '3281',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3281(\d{6})$'),
     '3282': const AI(
         code: '3282',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3282(\d{6})$'),
     '3283': const AI(
         code: '3283',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3283(\d{6})$'),
     '3284': const AI(
         code: '3284',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3284(\d{6})$'),
     '3285': const AI(
         code: '3285',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (ft)',
-        description:
-            'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, feet (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3285(\d{6})$'),
     '3290': const AI(
         code: '3290',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3290(\d{6})$'),
     '3291': const AI(
         code: '3291',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3291(\d{6})$'),
     '3292': const AI(
         code: '3292',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3292(\d{6})$'),
     '3293': const AI(
         code: '3293',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3293(\d{6})$'),
     '3294': const AI(
         code: '3294',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3294(\d{6})$'),
     '3295': const AI(
         code: '3295',
         type: AIFormatType.FIXED_LENGTH_MEASURE,
         dataTitle: 'HEIGHT (yd)',
-        description:
-            'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
+        description: 'Depth, thickness, height, or third dimension, yards (variable measure trade item)',
         fixLength: 6,
         regExpString: r'^3295(\d{6})$'),
     '37': const AI(
         code: '37',
         type: AIFormatType.VARIABLE_LENGTH,
         dataTitle: 'COUNT',
-        description:
-        'Count of trade items or trade item pieces contained in a logistic unit',
+        description: 'Count of trade items or trade item pieces contained in a logistic unit',
         fixLength: 8,
         regExpString: r'^37(\d{0,8})$'),
     '3922': const AI(
         code: '3922',
         type: AIFormatType.VARIABLE_LENGTH_MEASURE,
         dataTitle: 'PRICE',
-        description:
-            'Applicable amount payable, single monetary area (variable measure trade item)',
+        description: 'Applicable amount payable, single monetary area (variable measure trade item)',
         regExpString: r'^3922(\d{0,15})$'),
     '3932': const AI(
         code: '3932',
         type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS,
         dataTitle: 'PRICE',
-        description:
-            'Applicable amount payable with ISO currency code (variable measure trade item)',
+        description: 'Applicable amount payable with ISO currency code (variable measure trade item)',
         regExpString: r'^3932(\d{3})(\d{0,15})$'),
     '3933': const AI(
         code: '3933',
         type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS,
         dataTitle: 'PRICE',
-        description:
-            'Applicable amount payable with ISO currency code (variable measure trade item)',
+        description: 'Applicable amount payable with ISO currency code (variable measure trade item)',
         regExpString: r'^3933(\d{3})(\d{0,15})$'),
     '421': const AI(
         code: '421',
