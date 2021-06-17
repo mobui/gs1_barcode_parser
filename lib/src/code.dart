@@ -17,9 +17,9 @@ class Code {
   final String fnc1;
 
   const Code({
-    this.type,
-    this.codeTitle,
-    this.fnc1,
+    required this.type,
+    required this.codeTitle,
+    required this.fnc1,
   });
 
   @override

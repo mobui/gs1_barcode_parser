@@ -28,13 +28,10 @@ class GS1BarcodeParser {
   final GS1BarcodeParserConfig _config;
 
   GS1BarcodeParser._({
-    GS1BarcodeParserConfig config,
-    GS1CodeParser codeParser,
-    Map<AIFormatType, GS1ElementParser> elementParsers,
-  })  : assert(elementParsers != null),
-        assert(codeParser != null),
-        assert(config != null),
-        _config = config,
+    required GS1BarcodeParserConfig config,
+    required GS1CodeParser codeParser,
+    required Map<AIFormatType, GS1ElementParser> elementParsers,
+  })  : _config = config,
         _elementParsers = elementParsers,
         _codeParser = codeParser;
 
@@ -50,11 +47,9 @@ class GS1BarcodeParser {
       AIFormatType.FIXED_LENGTH: GS1ElementFixLengthParser(),
       AIFormatType.FIXED_LENGTH_MEASURE: GS1ElementFixLengthMeasureParser(),
       AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
-      AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS:
-          GS1VariableLengthWithISONumbersParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS: GS1VariableLengthWithISONumbersParser(),
       AIFormatType.VARIABLE_LENGTH_MEASURE: GS1VariableLengthMeasureParser(),
-      AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS:
-          GS1VariableLengthWithISOCharsParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS: GS1VariableLengthWithISOCharsParser(),
     };
     final codeParser = GS1PrefixCodeParser();
 
@@ -66,7 +61,7 @@ class GS1BarcodeParser {
   }
 
   /// Parse barcode string
-  GS1Barcode parse(String data, {CodeType codeType}) {
+  GS1Barcode parse(String data, {CodeType? codeType}) {
     if (data.isEmpty) {
       GS1DataException(message: 'Barcode is empty');
     }
@@ -74,8 +69,7 @@ class GS1BarcodeParser {
     final codeWithRest = _codeParser(
       _normalize(data, codeType: codeType),
     );
-    if (codeWithRest.code.type == CodeType.UNDEFINED &&
-        !_config.allowEmptyPrefix) {
+    if (codeWithRest.code.type == CodeType.UNDEFINED && !_config.allowEmptyPrefix) {
       throw GS1DataException(message: 'FNC1 prefix not found');
     }
 
@@ -103,6 +97,7 @@ class GS1BarcodeParser {
   ParsedElementWithRest _identifyAI(String data) {
     final twoNumber = data.substring(0, 2);
     var ai = AI.AIS[twoNumber];
+    final parser = _elementParsers[ai?.type];
 
     if (ai == null) {
       final threeNumber = data.substring(0, 3);
@@ -115,20 +110,26 @@ class GS1BarcodeParser {
     if (ai == null) {
       throw GS1ParseException(message: 'AI not found for $data');
     }
-    return _elementParsers[ai.type](data, ai, _config);
+    if (parser == null) {
+      throw GS1ParseException(message: 'Parser not found for $data [ai:${ai.type}]');
+    }
+    return parser(data, ai, _config);
   }
 
   /// Delete control characters in start of data
-  String _normalize(String data, {CodeType codeType}) {
+  String _normalize(String data, {CodeType? codeType}) {
     String result = data;
-    while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) ||
-        result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
+    while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) || result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
       result = result.substring(1);
     }
     if (codeType == null) {
       return result;
     } else {
-      return Code.CODES[codeType].fnc1 + result;
+      final fnc1 = Code.CODES[codeType]?.fnc1;
+      if (fnc1 == null) {
+        throw GS1ParseException(message: 'FNC1 not found for $data and codeType: $codeType');
+      }
+      return fnc1 + result;
     }
   }
 }
@@ -147,10 +148,10 @@ class GS1ParsedElement<T> {
   final String rawData;
 
   const GS1ParsedElement({
-    this.aiCode,
+    required this.aiCode,
     this.iso = '',
-    this.rawData,
-    this.data,
+    required this.rawData,
+    required this.data,
   });
 }
 
@@ -162,12 +163,12 @@ class GS1Barcode {
   final Map<String, GS1ParsedElement> elements;
 
   const GS1Barcode({
-    this.code,
-    this.elements,
+    required this.code,
+    required this.elements,
   });
 
   /// Get available AIs
-  List<String> get AIs => elements.keys;
+  Iterable<String> get AIs => elements.keys;
 
   /// Checking for availability AI
   bool hasAI(String ai) => elements.containsKey(ai);
@@ -176,38 +177,27 @@ class GS1Barcode {
   dynamic getAIData(String ai) => elements[ai]?.data;
 
   /// Get raw AI element data
-  String getAIRawData(String ai) => elements[ai]?.rawData;
+  String? getAIRawData(String ai) => elements[ai]?.rawData;
 
   /// Get AI element
-  GS1ParsedElement getAIParsedElement(String ai) => elements[ai];
+  GS1ParsedElement? getAIParsedElement(String ai) => elements[ai];
 
   /// Get all parsed AI elements data
-  Map<String, dynamic> get getAIsData => elements.values.fold(
-      {},
-      (previousValue, element) =>
-          previousValue..putIfAbsent(element.aiCode, () => element.data));
+  Map<String, dynamic> get getAIsData =>
+      elements.values.fold({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element.data));
 
   /// Get all AI elements
-  Map<String, GS1ParsedElement> get getAIsParsedElement =>
-      elements.values.fold<Map<String, GS1ParsedElement>>(
-          {},
-          (previousValue, element) =>
-              previousValue..putIfAbsent(element.aiCode, () => element));
+  Map<String, GS1ParsedElement> get getAIsParsedElement => elements.values
+      .fold<Map<String, GS1ParsedElement>>({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element));
 
   /// Get all raw AI elements data
-  Map<String, String> get getAIsRawData =>
-      elements.values.fold<Map<String, String>>(
-          {},
-          (previousValue, element) => previousValue
-            ..putIfAbsent(element.aiCode, () => element.rawData));
+  Map<String, String> get getAIsRawData => elements.values
+      .fold<Map<String, String>>({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element.rawData));
 
   @override
   String toString() {
-    final elem = elements.entries.fold(
-        '',
-        (previousValue, element) =>
-            previousValue +
-            '${element.key} (${AI.AIS[element.key].dataTitle}): ${element.value.data},\n');
+    final elem = elements.entries.fold('',
+        (String previousValue, element) => previousValue + '${element.key} (${AI.AIS[element.key]!.dataTitle}): ${element.value.data},\n');
     return 'code = ${code.codeTitle},\ndata = {\n$elem}';
   }
 }

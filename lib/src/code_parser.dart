@@ -5,8 +5,8 @@ class CodeWithRest {
   final String rest;
 
   const CodeWithRest({
-    this.code,
-    this.rest,
+    required this.code,
+    required this.rest,
   });
 }
 
@@ -17,9 +17,7 @@ abstract class GS1CodeParser {
 class GS1PrefixCodeParser implements GS1CodeParser {
   @override
   CodeWithRest call(String data) {
-    var code = Code.CODES.values.firstWhere(
-        (element) => data.startsWith(element.fnc1),
-        orElse: () => Code.UNDEFINED_CODE);
+    var code = Code.CODES.values.firstWhere((element) => data.startsWith(element.fnc1), orElse: () => Code.UNDEFINED_CODE);
 
     return CodeWithRest(
       rest: data.substring(code.fnc1.length),

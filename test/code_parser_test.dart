@@ -13,29 +13,28 @@ main() {
   test('parse GS1 Data Matrix code', () {
     final codeWithRest = codeParser(gs1DataMatrix);
     expect(codeWithRest.code.type, equals(CodeType.DATAMATRIX));
-    expect(
-        codeWithRest.code.fnc1, equals(Code.CODES[CodeType.DATAMATRIX].fnc1));
+    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.DATAMATRIX]!.fnc1));
     expect(codeWithRest.rest, equals(gs1WithoutFNC1));
   });
 
   test('parse GS1 QR code', () {
     final codeWithRest = codeParser(gs1QRCode);
     expect(codeWithRest.code.type, equals(CodeType.QR_CODE));
-    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.QR_CODE].fnc1));
+    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.QR_CODE]!.fnc1));
     expect(codeWithRest.rest, equals(gs1WithoutFNC1));
   });
 
   test('parse GS1 Code-128 code', () {
     final codeWithRest = codeParser(gs1Code128);
     expect(codeWithRest.code.type, equals(CodeType.GS1_128));
-    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.GS1_128].fnc1));
+    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.GS1_128]!.fnc1));
     expect(codeWithRest.rest, equals(gs1WithoutFNC1));
   });
 
   test('parse GS1 EAN code', () {
     final codeWithRest = codeParser(gs1EAN);
     expect(codeWithRest.code.type, equals(CodeType.EAN));
-    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.EAN].fnc1));
+    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.EAN]!.fnc1));
     expect(codeWithRest.rest, equals(gs1WithoutFNC1));
   });
 
