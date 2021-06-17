@@ -2,9 +2,11 @@ import 'package:gs1_barcode_parser/gs1_barcode_parser.dart';
 import 'package:test/test.dart';
 
 main() {
-  final String barcode = ']C101040123456789011715012910ABC1233932971471131030005253922471142127649716';
+  final String barcode =
+      ']C101040123456789011715012910ABC1233932971471131030005253922471142127649716';
 
-  final String barcode2 = '01040123456789011715012910ABC123393297147113103000525392247114212764971691';
+  final String barcode2 =
+      '01040123456789011715012910ABC123393297147113103000525392247114212764971691';
 
   test('Instance object', () {
     final parser = GS1BarcodeParser.defaultParser();
@@ -13,10 +15,9 @@ main() {
     }));
   });
 
-  test('Parse host barcode', () {
+  group('Parse host barcode', () {
     final parser = GS1BarcodeParser.defaultParser();
     final result = parser.parse(barcode);
-    print(result);
     test('codeType', () {
       expect(result.code.type, CodeType.GS1_128);
     });

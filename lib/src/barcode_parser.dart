@@ -47,9 +47,11 @@ class GS1BarcodeParser {
       AIFormatType.FIXED_LENGTH: GS1ElementFixLengthParser(),
       AIFormatType.FIXED_LENGTH_MEASURE: GS1ElementFixLengthMeasureParser(),
       AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
-      AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS: GS1VariableLengthWithISONumbersParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS:
+          GS1VariableLengthWithISONumbersParser(),
       AIFormatType.VARIABLE_LENGTH_MEASURE: GS1VariableLengthMeasureParser(),
-      AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS: GS1VariableLengthWithISOCharsParser(),
+      AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS:
+          GS1VariableLengthWithISOCharsParser(),
     };
     final codeParser = GS1PrefixCodeParser();
 
@@ -69,7 +71,8 @@ class GS1BarcodeParser {
     final codeWithRest = _codeParser(
       _normalize(data, codeType: codeType),
     );
-    if (codeWithRest.code.type == CodeType.UNDEFINED && !_config.allowEmptyPrefix) {
+    if (codeWithRest.code.type == CodeType.UNDEFINED &&
+        !_config.allowEmptyPrefix) {
       throw GS1DataException(message: 'FNC1 prefix not found');
     }
 
@@ -97,7 +100,6 @@ class GS1BarcodeParser {
   ParsedElementWithRest _identifyAI(String data) {
     final twoNumber = data.substring(0, 2);
     var ai = AI.AIS[twoNumber];
-    final parser = _elementParsers[ai?.type];
 
     if (ai == null) {
       final threeNumber = data.substring(0, 3);
@@ -110,8 +112,11 @@ class GS1BarcodeParser {
     if (ai == null) {
       throw GS1ParseException(message: 'AI not found for $data');
     }
+
+    final parser = _elementParsers[ai.type];
     if (parser == null) {
-      throw GS1ParseException(message: 'Parser not found for $data [ai:${ai.type}]');
+      throw GS1ParseException(
+          message: 'Parser not found for $data [ai:${ai.type}]');
     }
     return parser(data, ai, _config);
   }
@@ -119,7 +124,8 @@ class GS1BarcodeParser {
   /// Delete control characters in start of data
   String _normalize(String data, {CodeType? codeType}) {
     String result = data;
-    while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) || result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
+    while (result.startsWith(GS1BarcodeParserConfig.DEFAULT_GROUP_SEPARATOR) ||
+        result.startsWith(GS1BarcodeParserConfig.DEFAULT_FNC1)) {
       result = result.substring(1);
     }
     if (codeType == null) {
@@ -127,7 +133,8 @@ class GS1BarcodeParser {
     } else {
       final fnc1 = Code.CODES[codeType]?.fnc1;
       if (fnc1 == null) {
-        throw GS1ParseException(message: 'FNC1 not found for $data and codeType: $codeType');
+        throw GS1ParseException(
+            message: 'FNC1 not found for $data and codeType: $codeType');
       }
       return fnc1 + result;
     }
@@ -183,21 +190,32 @@ class GS1Barcode {
   GS1ParsedElement? getAIParsedElement(String ai) => elements[ai];
 
   /// Get all parsed AI elements data
-  Map<String, dynamic> get getAIsData =>
-      elements.values.fold({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element.data));
+  Map<String, dynamic> get getAIsData => elements.values.fold(
+      {},
+      (previousValue, element) =>
+          previousValue..putIfAbsent(element.aiCode, () => element.data));
 
   /// Get all AI elements
-  Map<String, GS1ParsedElement> get getAIsParsedElement => elements.values
-      .fold<Map<String, GS1ParsedElement>>({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element));
+  Map<String, GS1ParsedElement> get getAIsParsedElement =>
+      elements.values.fold<Map<String, GS1ParsedElement>>(
+          {},
+          (previousValue, element) =>
+              previousValue..putIfAbsent(element.aiCode, () => element));
 
   /// Get all raw AI elements data
-  Map<String, String> get getAIsRawData => elements.values
-      .fold<Map<String, String>>({}, (previousValue, element) => previousValue..putIfAbsent(element.aiCode, () => element.rawData));
+  Map<String, String> get getAIsRawData =>
+      elements.values.fold<Map<String, String>>(
+          {},
+          (previousValue, element) => previousValue
+            ..putIfAbsent(element.aiCode, () => element.rawData));
 
   @override
   String toString() {
-    final elem = elements.entries.fold('',
-        (String previousValue, element) => previousValue + '${element.key} (${AI.AIS[element.key]!.dataTitle}): ${element.value.data},\n');
+    final elem = elements.entries.fold(
+        '',
+        (String previousValue, element) =>
+            previousValue +
+            '${element.key} (${AI.AIS[element.key]!.dataTitle}): ${element.value.data},\n');
     return 'code = ${code.codeTitle},\ndata = {\n$elem}';
   }
 }

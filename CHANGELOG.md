@@ -1,3 +1,7 @@
+## [1.0.0]
+* Magration to null safety (thanks https://github.com/koyta)
+* Add 33+,34+ AI definition
+
 ## [0.0.8]
 * Add 37 AI definition
 

@@ -13,7 +13,8 @@ main() {
   test('parse GS1 Data Matrix code', () {
     final codeWithRest = codeParser(gs1DataMatrix);
     expect(codeWithRest.code.type, equals(CodeType.DATAMATRIX));
-    expect(codeWithRest.code.fnc1, equals(Code.CODES[CodeType.DATAMATRIX]!.fnc1));
+    expect(
+        codeWithRest.code.fnc1, equals(Code.CODES[CodeType.DATAMATRIX]!.fnc1));
     expect(codeWithRest.rest, equals(gs1WithoutFNC1));
   });
 
