@@ -163,7 +163,7 @@ class AI {
       regExpString: r'^17(\d{6})$',
     ),
     '20': const AI(
-      code: '16',
+      code: '20',
       type: AIFormatType.FIXED_LENGTH,
       dataTitle: 'VARIANT',
       regExpString: r'^20(\d{2})$',

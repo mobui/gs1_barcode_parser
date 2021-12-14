@@ -1,3 +1,6 @@
+## [1.0.1]
+* Fix Application Identifier 20 - VARIANT (thanks https://github.com/aac-le)
+
 ## [1.0.0]
 * Magration to null safety (thanks https://github.com/koyta)
 * Add 33+,34+ AI definition
