@@ -1,3 +1,6 @@
+## [1.0.2]
+* Add 71+ AI definition
+
 ## [1.0.1]
 * Fix Application Identifier 20 - VARIANT (thanks https://github.com/aac-le)
 

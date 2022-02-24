@@ -1844,6 +1844,42 @@ class AI {
         dataTitle: 'COUNTRY - INITIAL PROCESS.',
         description: 'Country of initial processing',
         regExpString: r'^423(\d{3})(\d{0,12})$'),
+    '710': const AI(
+        code: '710',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN PZN',
+        description: 'National Healthcare Reimbursement Number (NHRN) - Germany PZN',
+        regExpString: '^710($_ALLOW_CHAR{0,20})\$'),
+    '711': const AI(
+        code: '711',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN CIP',
+        description: 'National Healthcare Reimbursement Number (NHRN) - France CIP',
+        regExpString: '^711($_ALLOW_CHAR{0,20})\$'),
+    '712': const AI(
+        code: '712',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN CN',
+        description: 'National Healthcare Reimbursement Number (NHRN) - Spain CN',
+        regExpString: '^712($_ALLOW_CHAR{0,20})\$'),
+    '713': const AI(
+        code: '713',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN DRN',
+        description: 'National Healthcare Reimbursement Number (NHRN) - Brasil DRN',
+        regExpString: '^713($_ALLOW_CHAR{0,20})\$'),
+    '714': const AI(
+        code: '714',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN AIM',
+        description: 'National Healthcare Reimbursement Number (NHRN) - Portugal AIM',
+        regExpString: '^714($_ALLOW_CHAR{0,20})\$'),
+    '715': const AI(
+        code: '715',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'NHRN NDC',
+        description: 'National Healthcare Reimbursement Number (NHRN) - United States of America NDC',
+        regExpString: '^715($_ALLOW_CHAR{0,20})\$'),
     '90': const AI(
         code: '90',
         type: AIFormatType.VARIABLE_LENGTH,

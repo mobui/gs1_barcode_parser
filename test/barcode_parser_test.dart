@@ -32,9 +32,18 @@ main() {
   test('Parse raw barcode from scanner', () {
     final parser = GS1BarcodeParser.defaultParser();
     final result = parser.parse(barcode2, codeType: CodeType.DATAMATRIX);
-    print(result);
     expect(result.code.type, CodeType.DATAMATRIX);
     expect(result.hasAI('01'), true);
     expect(result.getAIRawData('01'), '04012345678901');
   });
+
+  test('Parse raw barcode from scanner with 714 AI', () {
+    final String barcode3 = '0105609380810435212674577536673210A2075I0172509307149507343';
+    final parser = GS1BarcodeParser.defaultParser();
+    final result = parser.parse(barcode3,);
+    expect(result.code.type, CodeType.UNDEFINED);
+    expect(result.hasAI('714'), true);
+    expect(result.getAIRawData('714'), '9507343');
+  });
+
 }
