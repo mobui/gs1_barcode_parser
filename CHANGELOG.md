@@ -1,3 +1,6 @@
+## [1.0.3]
+* Add 422 AI definition
+
 ## [1.0.2]
 * Add 71+ AI definition
 

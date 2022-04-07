@@ -1838,6 +1838,12 @@ class AI {
         dataTitle: 'SHIP TO POST',
         description: 'Ship to / Deliver to postal code with ISO country code',
         regExpString: '^421(\\d{3})($_ALLOW_CHAR{0,9})\$'),
+    '422': const AI(
+        code: '422',
+        type: AIFormatType.FIXED_LENGTH,
+        dataTitle: 'ORIGIN',
+        description: 'Country of origin of a trade item',
+        regExpString: r'^422(\d{3})$'),
     '423': const AI(
         code: '423',
         type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_NUMBERS,
