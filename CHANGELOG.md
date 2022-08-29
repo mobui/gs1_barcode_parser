@@ -1,3 +1,6 @@
+## [1.0.4]
+* Add 8005 AI definition and CRPT tests
+
 ## [1.0.3]
 * Add 422 AI definition
 
