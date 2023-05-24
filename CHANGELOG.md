@@ -1,3 +1,6 @@
+## [1.0.5]
+* Add 8200 AI definition
+
 ## [1.0.4]
 * Add 8005 AI definition and CRPT tests
 
@@ -11,7 +14,7 @@
 * Fix Application Identifier 20 - VARIANT (thanks https://github.com/aac-le)
 
 ## [1.0.0]
-* Magration to null safety (thanks https://github.com/koyta)
+* Migration to null safety (thanks https://github.com/koyta)
 * Add 33+,34+ AI definition
 
 ## [0.0.8]

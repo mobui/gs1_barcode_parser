@@ -1899,6 +1899,12 @@ class AI {
         dataTitle: 'PRICE PER UNIT',
         description: 'Price per unit of measure',
         regExpString: r'^8005(\d{6})$'),
+    '8200': const AI(
+        code: '8200',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'PRODUCT URL',
+        description: 'Extended Packaging URL',
+        regExpString: '^8200($_ALLOW_CHAR{0,70})\$'),
     '90': const AI(
         code: '90',
         type: AIFormatType.VARIABLE_LENGTH,
