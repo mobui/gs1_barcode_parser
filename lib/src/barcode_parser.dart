@@ -13,10 +13,12 @@ class GS1BarcodeParserConfig {
 
   /// Group separator. Default 0xE8
   final String groupSeparator;
+  final Map<String, AI> customAIS;
 
   GS1BarcodeParserConfig({
     this.allowEmptyPrefix = true,
     this.groupSeparator = DEFAULT_GROUP_SEPARATOR,
+    this.customAIS = const {},
   });
 }
 

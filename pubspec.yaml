@@ -1,6 +1,6 @@
 name: gs1_barcode_parser
 description: The barcode parser is a library for handling the contents of GS1 barcodes.
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/mobui/gs1_barcode_parser
 
 environment:
