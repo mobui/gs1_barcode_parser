@@ -1892,6 +1892,11 @@ class AI {
         description:
             'National Healthcare Reimbursement Number (NHRN) - United States of America NDC',
         regExpString: '^715($_ALLOW_CHAR{0,20})\$'),
+    '7031': const AI(
+        code: '7031',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'PROCESSOR # 1',
+        regExpString: '^7031(\d{3})([$_ALLOW_CHAR{1,27}])\$'),
     '8005': const AI(
         code: '8005',
         type: AIFormatType.FIXED_LENGTH,
