@@ -1896,6 +1896,7 @@ class AI {
         code: '7031',
         type: AIFormatType.VARIABLE_LENGTH,
         dataTitle: 'PROCESSOR # 1',
+        description: 'Number of processor with three-digit ISO country code',
         regExpString: '^7031(\d{3})([$_ALLOW_CHAR{1,27}])\$'),
     '8005': const AI(
         code: '8005',
