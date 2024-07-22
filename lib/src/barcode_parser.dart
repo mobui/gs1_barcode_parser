@@ -13,12 +13,12 @@ class GS1BarcodeParserConfig {
 
   /// Group separator. Default 0xE8
   final String groupSeparator;
-  final Map<String, AI> customAIS;
+  final Map<String, AI> customAIs;
 
   GS1BarcodeParserConfig({
     this.allowEmptyPrefix = true,
     this.groupSeparator = DEFAULT_GROUP_SEPARATOR,
-    this.customAIS = const {},
+    this.customAIs = const {},
   });
 }
 
@@ -87,7 +87,7 @@ class GS1BarcodeParser {
     final elements = <String, GS1ParsedElement>{};
 
     while (restOfBarcode.isNotEmpty) {
-      final res = _identifyAI(restOfBarcode);
+      final res = _identifyAI(restOfBarcode, _config.customAIs);
       elements.putIfAbsent(res.element.aiCode, () => res.element);
       restOfBarcode = res.rest;
     }
@@ -98,18 +98,23 @@ class GS1BarcodeParser {
     );
   }
 
+  /// get AIs
+  AI? _getAI(String ai, [Map<String, AI> customAIs = const {}]) =>
+      customAIs[ai] ?? AI.AIS[ai];
+
   /// Get ans parse AI
-  ParsedElementWithRest _identifyAI(String data) {
+  ParsedElementWithRest _identifyAI(String data,
+      [Map<String, AI> customAIs = const {}]) {
     final twoNumber = data.substring(0, 2);
-    var ai = AI.AIS[twoNumber];
+    var ai = _getAI(twoNumber, customAIs);
 
     if (ai == null) {
       final threeNumber = data.substring(0, 3);
-      ai = AI.AIS[threeNumber];
+      ai = _getAI(threeNumber, customAIs);
     }
     if (ai == null) {
       final fourNumber = data.substring(0, 4);
-      ai = AI.AIS[fourNumber];
+      ai = _getAI(fourNumber, customAIs);
     }
     if (ai == null) {
       throw GS1ParseException(message: 'AI not found for $data');

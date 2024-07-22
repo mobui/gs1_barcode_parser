@@ -1,4 +1,7 @@
 ## [1.0.6]
+* Add Custom AI definition (see custom_ai_test.dart)
+
+## [1.0.6]
 * Add 7031 AI definition
 
 ## [1.0.5]
