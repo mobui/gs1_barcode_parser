@@ -1971,5 +1971,43 @@ class AI {
         dataTitle: 'INTERNAL',
         description: 'Company internal information',
         regExpString: '^99($_ALLOW_CHAR{0,90})\$'),
+    '8001': const AI(
+        code: '8001',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'ROLL PRODUCTS',
+        fixLength: 14,
+        regExpString: r'^8001(\d{4})(\d{14})$',
+        description: 'Roll products – width, length, core diameter, direction, and splices'),
+    '8002': const AI(
+        code: '8002',
+        type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS,
+        dataTitle: 'CMT NO.',
+        regExpString: '^8002(\d{4})($_ALLOW_CHAR{0,20})$\$',
+        description: 'Electronic serial identifier for cellular mobile telephones'),
+    '8003': const AI(
+        code: '8003',
+        type: AIFormatType.VARIABLE_LENGTH,
+        dataTitle: 'GRAI',
+        regExpString: r'^8003(\d{4})(\d{14})([\u{0021}-\u{007a}]{0,16})$',
+        description: 'Global Returnable Asset Identifier (GRAI)'),
+    '8004': const AI(
+        code: '8004',
+        type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS,
+        dataTitle: 'GIAI',
+        regExpString: '^8004(\d{4})($_ALLOW_CHAR{0,30})$\$',
+        description: 'Global Individual Asset Identifier (GIAI)'),
+    '8007': const AI(
+        code: '8007',
+        type: AIFormatType.VARIABLE_LENGTH_WITH_ISO_CHARS,
+        dataTitle: 'IBAN',
+        regExpString: '^8007(\d{4})($_ALLOW_CHAR{0,34})$\$',
+        description: 'International Bank Account Number (IBAN)'),
+    '8008': const AI(
+        code: '8008',
+        type: AIFormatType.FIXED_LENGTH_MEASURE,
+        dataTitle: 'PROD TIME',
+        fixLength: 12,
+        regExpString: r'^8008(\d{12})$',
+        description: 'Date and time of production (YYMMDDHHMMSS)'),
   };
 }
