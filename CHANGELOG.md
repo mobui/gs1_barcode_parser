@@ -1,4 +1,7 @@
-## [1.0.6]
+## [1.1.1]
+* Add AIs (8001, 8002, 8003, 8004, 8007, 8008)
+
+## [1.1.0]
 * Add Custom AI definition (see custom_ai_test.dart)
 
 ## [1.0.6]
