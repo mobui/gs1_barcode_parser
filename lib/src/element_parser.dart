@@ -70,6 +70,44 @@ class GS1DateParser extends GS1ElementParser {
   }
 }
 
+class GS1DateTimeParser extends GS1ElementParser {
+  @override
+  ParsedElementWithRest call(
+      String data, AI ai, GS1BarcodeParserConfig config) {
+    final posOfGS = data.indexOf(config.groupSeparator);
+    final offset = posOfGS == -1 ? data.length : posOfGS;
+    final elementStr = data.substring(0, offset);
+
+    if (!verify(elementStr, ai)) {
+      throw GS1ParseException(
+          message: 'Data format mismatch ${ai.regExp} for AI ${ai.code}');
+    }
+
+    final rawData = elementStr.substring(ai.code.length);
+    final elementDateTime = rawData.padRight(12, '0');
+    var year =
+        _year2ToYear4(int.parse(elementDateTime.substring(0, 2), radix: 10));
+    final month = int.parse(elementDateTime.substring(2, 4), radix: 10);
+    final day = int.parse(elementDateTime.substring(4, 6), radix: 10);
+    final hour = int.parse(elementDateTime.substring(6, 8), radix: 10);
+    final minute = int.parse(elementDateTime.substring(8, 10), radix: 10);
+    final second = int.parse(elementDateTime.substring(10), radix: 10);
+
+    final element = GS1ParsedElement<DateTime>(
+      rawData: rawData,
+      aiCode: ai.code,
+      data: DateTime(year, month, day, hour, minute, second),
+    );
+
+    final rest = getRest(data, offset, config);
+    return ParsedElementWithRest(element: element, rest: rest);
+  }
+
+  _year2ToYear4(int year) {
+    return year > 50 ? year + 1900 : year = year + 2000;
+  }
+}
+
 class GS1ElementFixLengthParser extends GS1ElementParser {
   @override
   ParsedElementWithRest call(

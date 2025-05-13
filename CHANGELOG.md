@@ -1,3 +1,6 @@
+## [1.1.2]
+* Fixed AIs (8001, 8002, 8003, 8004, 8007, 8008) (see issue_13_test.dart)
+  
 ## [1.1.1]
 * Add AIs (8001, 8002, 8003, 8004, 8007, 8008)
 
@@ -55,12 +58,3 @@
 
 ## [0.0.1] - Initial release
 * GS1 code parser with minimum GS1 Application Identifiers (AIs)
-
-
-
-
-
-
-
-
-

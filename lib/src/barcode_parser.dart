@@ -46,6 +46,7 @@ class GS1BarcodeParser {
   factory GS1BarcodeParser.configurableParser(GS1BarcodeParserConfig config) {
     final elementParsers = {
       AIFormatType.DATE: GS1DateParser(),
+      AIFormatType.DATE_TIME: GS1DateTimeParser(),
       AIFormatType.FIXED_LENGTH: GS1ElementFixLengthParser(),
       AIFormatType.FIXED_LENGTH_MEASURE: GS1ElementFixLengthMeasureParser(),
       AIFormatType.VARIABLE_LENGTH: GS1VariableLengthParser(),
@@ -105,6 +106,15 @@ class GS1BarcodeParser {
   /// Get ans parse AI
   ParsedElementWithRest _identifyAI(String data,
       [Map<String, AI> customAIs = const {}]) {
+    if (data.isEmpty) {
+      throw GS1ParseException(message: 'AI not found for $data. AI is empty');
+    }
+
+    if (data.length < 2) {
+      throw GS1ParseException(
+          message: 'AI not found for $data. Length must be > 2');
+    }
+
     final twoNumber = data.substring(0, 2);
     var ai = _getAI(twoNumber, customAIs);
 
